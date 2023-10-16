@@ -26,6 +26,17 @@ export class CommandLineArgumentSettingsLoader extends SettingsLoader {
 				type: "string",
 				demandOption: false,
 			})
+			.option("usePersonalAccessToken", {
+				describe:
+					"Use personal access token instead of email and APIkey",
+				type: "boolean",
+				demandOption: false,
+			})
+			.option("personalAccessToken", {
+				describe: "Personal Access Token",
+				type: "string",
+				demandOption: false,
+			})
 			.option("userName", {
 				alias: "u",
 				describe: "Atlassian user name",
@@ -65,6 +76,12 @@ export class CommandLineArgumentSettingsLoader extends SettingsLoader {
 				: undefined),
 			...(options.parentId
 				? { confluenceParentId: options.parentId }
+				: undefined),
+			...(options.usePersonalAccessToken
+				? { usePersonalAccessToken: options.usePersonalAccessToken }
+				: undefined),
+			...(options.personalAccessToken
+				? { personalAccessToken: options.personalAccessToken }
 				: undefined),
 			...(options.userName
 				? { atlassianUserName: options.userName }

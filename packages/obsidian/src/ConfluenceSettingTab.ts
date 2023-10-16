@@ -32,6 +32,30 @@ export class ConfluenceSettingTab extends PluginSettingTab {
 			);
 
 		new Setting(containerEl)
+			.setName("Use Personal Access Token")
+			.setDesc("Use the personal token instead of Email+APIkey")
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.plugin.settings.usePersonalAccessToken)
+					.onChange(async (value) => {
+						this.plugin.settings.usePersonalAccessToken = value;
+						await this.plugin.saveSettings();
+					}),
+			);
+		new Setting(containerEl)
+			.setName("Personal Access Token")
+			.setDesc("")
+			.addText((text) =>
+				text
+					.setPlaceholder("")
+					.setValue(this.plugin.settings.personalAccessToken)
+					.onChange(async (value) => {
+						this.plugin.settings.personalAccessToken = value;
+						await this.plugin.saveSettings();
+					}),
+			);
+
+		new Setting(containerEl)
 			.setName("Atlassian Username")
 			.setDesc('eg "username@domain.com"')
 			.addText((text) =>

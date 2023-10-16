@@ -1,4 +1,5 @@
 import { Plugin, Notice, MarkdownView, Workspace, loadMermaid } from "obsidian";
+import { Config } from "confluence.js";
 import {
 	ConfluenceUploadSettings,
 	Publisher,
@@ -72,14 +73,9 @@ export default class ConfluencePlugin extends Plugin {
 			mermaidItems.mermaidConfig,
 			mermaidItems.bodyStyles,
 		);
-		const confluenceClient = new ObsidianConfluenceClient({
+
+		const cfg: Config = {
 			host: this.settings.confluenceBaseUrl,
-			authentication: {
-				basic: {
-					email: this.settings.atlassianUserName,
-					apiToken: this.settings.atlassianApiToken,
-				},
-			},
 			middlewares: {
 				onError(e) {
 					if ("response" in e && "data" in e.response) {
@@ -90,7 +86,21 @@ export default class ConfluencePlugin extends Plugin {
 					}
 				},
 			},
-		});
+		};
+		if (this.settings.usePersonalAccessToken) {
+			cfg.authentication = {
+				personalAccessToken: this.settings.personalAccessToken,
+			};
+		} else {
+			cfg.authentication = {
+				basic: {
+					email: this.settings.atlassianUserName,
+					apiToken: this.settings.atlassianApiToken,
+				},
+			};
+		}
+
+		const confluenceClient = new ObsidianConfluenceClient(cfg);
 
 		const settingsLoader = new StaticSettingsLoader(this.settings);
 		this.publisher = new Publisher(
@@ -245,15 +255,21 @@ export default class ConfluencePlugin extends Plugin {
 				);
 				console.log({ json });
 
-				const confluenceClient = new ObsidianConfluenceClient({
-					host: this.settings.confluenceBaseUrl,
-					authentication: {
+				const cfg: Config = { host: this.settings.confluenceBaseUrl };
+				if (this.settings.usePersonalAccessToken) {
+					cfg.authentication = {
+						personalAccessToken: this.settings.personalAccessToken,
+					};
+				} else {
+					cfg.authentication = {
 						basic: {
 							email: this.settings.atlassianUserName,
 							apiToken: this.settings.atlassianApiToken,
 						},
-					},
-				});
+					};
+				}
+				const confluenceClient = new ObsidianConfluenceClient(cfg);
+
 				const testingPage =
 					await confluenceClient.content.getContentById({
 						id: "9732097",

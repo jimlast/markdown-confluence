@@ -220,6 +220,8 @@ test.each(markdownTestCases)("parses $fileName", (markdown: MarkdownFile) => {
 	const settings: ConfluenceSettings = {
 		confluenceBaseUrl: "https://example.com",
 		confluenceParentId: "asdf",
+		usePersonalAccessToken: false,
+		personalAccessToken: "",
 		atlassianUserName: "asdf@asdf.com",
 		atlassianApiToken: "asdfasdf",
 		folderToPublish: ".",

@@ -1,6 +1,8 @@
 export type ConfluenceSettings = {
 	confluenceBaseUrl: string;
 	confluenceParentId: string;
+	usePersonalAccessToken: boolean;
+	personalAccessToken: string;
 	atlassianUserName: string;
 	atlassianApiToken: string;
 	folderToPublish: string;
@@ -11,6 +13,8 @@ export type ConfluenceSettings = {
 export const DEFAULT_SETTINGS: ConfluenceSettings = {
 	confluenceBaseUrl: "",
 	confluenceParentId: "",
+	usePersonalAccessToken: true,
+	personalAccessToken: "",
 	atlassianUserName: "",
 	atlassianApiToken: "",
 	folderToPublish: "Confluence Pages",
